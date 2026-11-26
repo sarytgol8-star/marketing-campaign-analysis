@@ -49,7 +49,7 @@ These overall ratios are calculated from **sums**, not by averaging row-level ra
 
 ## Dashboard
 
-![Power BI dashboard](dashboard/dashboard.png)
+![Power BI dashboard](dashboard/2%20project.png)
 
 The dashboard includes five overall KPI cards, monthly revenue vs cost, top ten ad groups by revenue, monthly ROAS with the 1.0 break-even reference line, CPA comparison and a group slicer.
 
