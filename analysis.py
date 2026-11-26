@@ -1,0 +1,227 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+df = pd.read_csv('final_shop_6modata.csv')
+# Создаём папку для графиков
+Path('charts').mkdir(exist_ok=True)
+
+#Правильный порядок месяцев
+months = ['July', 'August', 'September', 'October', 'November']
+
+# Группировка по месяцам
+monthly = df.groupby('Month')[
+    ['Revenue', 'Cost', 'Clicks', 'Conversions']
+    ].sum()
+
+monthly = monthly.reindex(months)
+
+# График дохода
+plt.figure(figsize=(10, 5))
+
+plt.plot(monthly.index, monthly['Revenue'], marker='o')
+
+plt.title('Monthly Revenue')
+plt.xlabel('Month')
+plt.ylabel('Revenue')
+
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# 46. Линейный график расходов по месяцам
+plt.figure(figsize=(10, 5))
+
+plt.plot(monthly.index, monthly['Cost'], marker='o')
+
+plt.title('46.Monthly Advertising Cost')
+plt.xlabel('Month')
+plt.ylabel('Cost')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('charts/monthly_cost.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+
+ #47. Столбчатая диаграмма конверсий
+plt.figure(figsize=(10, 5))
+
+plt.bar(monthly.index, monthly['Conversions'])
+
+plt.title('47.Monthly Conversions')
+plt.xlabel('Month')
+plt.ylabel('Conversions')
+plt.tight_layout()
+plt.savefig('charts/monthly_conversions.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+
+# 48. Линейный график ROAS по месяцам
+monthly['ROAS'] = monthly['Revenue'] / monthly['Cost']
+
+plt.figure(figsize=(10, 5))
+
+plt.plot(monthly.index, monthly['ROAS'], marker='o')
+
+plt.title('48.Monthly ROAS')
+plt.xlabel('Month')
+plt.ylabel('ROAS')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('charts/monthly_ROAS.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+
+# 49. Сравнение доходов и расходов
+plt.figure(figsize=(10, 5))
+
+plt.plot(monthly.index, monthly['Revenue'], marker='o', label='Revenue')
+plt.plot(monthly.index, monthly['Cost'], marker='o', label='Cost')
+
+plt.title('49.Revenue vs Cost')
+plt.xlabel('Month')
+plt.ylabel('Amount')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('charts/revenue_vs_cost.png', dpi=300, bbox_inches='tight')
+plt.show()
+import pandas as pd
+# Загрузка данных
+df = pd.read_csv("final_shop_6modata.csv")
+# Первые 10 строк
+print('1.',df.head(10))
+# Количество строк и столбцов
+print('2.',df.shape)
+# Названия столбцов
+print('3.',df.columns)
+# Типы данных
+print('4.',df.dtypes)
+# Количество пропущенных значений
+print('5.',df.isna().sum())
+# Количество дубликатов
+print('6.',df.duplicated().sum())
+#последние 5 строк
+print('7.',df.tail(5))
+#общее кол-во кликов
+print('8.',df['Clicks'].sum())
+#общие расходы на рекламу
+print('9.',df['Cost'].sum())
+#среднее кол-во показов
+print('10.',df['Impressions'].mean())
+#Максимальное количество конверсий
+print('11.',df['Conversions'].max())
+#общий доход
+print('12.',df['Revenue'].sum())
+#минимальные расходы
+print('13.',df['Cost'].min())
+#среднее кол-во кликов
+print('14.',df['Clicks'].mean())
+#общее кол-во конверсий
+print('15.',df['Conversions'].sum())
+#кол-ва уникальных групп объявлений
+print('16.',df['Ad Group'].nunique())
+#объявления с расходами больше 500
+print('17.',df[df['Cost']>500])
+#объявления с нулевым количеством конверсий
+print('18.',df[df['Conversions']==0])
+#объявления с доходом больше 1000
+print('19.',df[df['Revenue']>1000])
+#количество объявлений с числом показов больше 5000
+print('20.',len(df[df['Impressions']>5000]))
+#суммарный доход объявлений с количеством кликов больше 200
+print('21.',df[df['Clicks']>200]['Revenue'].sum())
+#общие расходы по каждому месяцу
+print('22.',df.groupby('Month')['Cost'].sum())
+#общее количество кликов по каждому месяцу
+print('23.',df.groupby('Month')['Clicks'].sum())
+#среднее количество конверсий по каждому месяцу.
+print('24.',df.groupby('Month')['Conversions'].mean())
+#общие расходы по месяцам, отсортировав от больших к меньшим
+print('25.',df.groupby('Month')['Cost'].sum().sort_values(ascending=False))
+#общие доходы по месяцам, отсортировав от меньших к большим
+print('26.',df.groupby('Month')['Revenue'].sum().sort_values(ascending=True))
+#топ-5 групп объявлений по суммарному количеству кликов
+print('27.',df.groupby('Ad Group')['Clicks'].sum().sort_values(ascending=False).head(5))
+#Количество строк, где расходы равны нулю
+print('28.', len(df[df['Cost'] == 0]))
+#Количество строк, где клики равны нулю
+print('29.', len(df[df['Clicks'] == 0]))
+#Строки, где доход меньше расходов
+print('30.', df[df['Revenue'] < df['Cost']])
+#Максимальный и минимальный доход
+print('31. Максимальный доход:', df['Revenue'].max())
+print('31. Минимальный доход:', df['Revenue'].min())
+#Проверка отрицательных расходов
+print('32.', df[df['Cost'] < 0])
+
+
+# Суммарные показатели
+total_clicks = df['Clicks'].sum()
+total_impressions = df['Impressions'].sum()
+total_cost = df['Cost'].sum()
+total_conversions = df['Conversions'].sum()
+total_revenue = df['Revenue'].sum()
+#CPC — средняя стоимость клика
+cpc = total_cost / total_clicks
+print('33. CPC:', round(cpc, 2))
+# CPA — стоимость одной конверсии
+cpa = total_cost / total_conversions
+print('34. CPA:', round(cpa, 2))
+#ROAS — окупаемость рекламных расходов
+roas = total_revenue / total_cost
+print('35. ROAS:', round(roas, 2))
+#Conversion Rate — коэффициент конверсии
+conversion_rate = total_conversions / total_clicks * 100
+print('36. Conversion Rate:', round(conversion_rate, 2), '%')
+#Дополнительно: CTR — кликабельность рекламы
+ctr = total_clicks / total_impressions * 100
+print('37. CTR:', round(ctr, 2), '%')
+
+
+#Группировка данных по рекламным группам
+groups = df.groupby('Ad Group')[
+    ['Cost', 'Revenue', 'Clicks', 'Conversions', 'Impressions']
+].sum()
+#CPC — стоимость одного клика
+groups['CPC'] = groups['Cost'] / groups['Clicks']
+print('37. CPC:')
+print(groups['CPC'].round(2))
+#CPA — стоимость одной конверсии
+groups['CPA'] = groups['Cost'] / groups['Conversions']
+print('38. CPA:')
+print(groups['CPA'].round(2))
+#Conversion Rate — процент конверсии
+groups['Conversion Rate'] = groups['Conversions'] / groups['Clicks'] * 100
+print('39. Conversion Rate:')
+print(groups['Conversion Rate'].round(2))
+#Топ-5 рекламных групп с самым низким CPA
+top_5 = groups.sort_values('CPA', ascending=True).head(5)
+print('40. Топ-5 групп с самым низким CPA:')
+print(top_5[['Cost', 'Conversions', 'CPA']].round(2))
+
+
+
+# Группировка данных по месяцам
+monthly = df.groupby('Month')[
+    ['Cost', 'Revenue', 'Clicks', 'Conversions', 'Impressions']
+].sum()
+# Расчёт ROAS
+monthly['ROAS'] = monthly['Revenue'] / monthly['Cost']
+#CPC — средняя стоимость клика по месяцам
+monthly['CPC'] = monthly['Cost'] / monthly['Clicks']
+print('41. CPC по месяцам:')
+print(monthly['CPC'].round(2))
+#CPA — стоимость одной конверсии по месяцам
+monthly['CPA'] = monthly['Cost'] / monthly['Conversions']
+print('42. CPA по месяцам:')
+print(monthly['CPA'].round(2))
+#CTR — кликабельность рекламы по месяцам
+monthly['CTR'] = monthly['Clicks'] / monthly['Impressions'] * 100
+print('43. CTR по месяцам:')
+print(monthly['CTR'].round(2))
+#Месяц с максимальным количеством конверсий
+print('44. Месяц с максимальным количеством конверсий:')
+print(monthly.sort_values('Conversions', ascending=False).head(1))
+#Топ-3 месяца с самым высоким ROAS
+print('45. Топ-3 месяца по ROAS:')
+print(monthly.sort_values('ROAS', ascending=False).head(3))
