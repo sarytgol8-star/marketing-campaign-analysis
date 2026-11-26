@@ -87,7 +87,7 @@ plt.savefig('charts/revenue_vs_cost.png', dpi=300, bbox_inches='tight')
 plt.show()
 import pandas as pd
 # Загрузка данных
-df = pd.read_csv("final_shop_6modata.csv")
+df = pd.read_csv("data/final_shop_6modata.csv")
 # Первые 10 строк
 print('1.',df.head(10))
 # Количество строк и столбцов
