@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
-df = pd.read_csv('final_shop_6modata.csv')
+df = pd.read_csv('data/final_shop_6modata.csv')
 # Создаём папку для графиков
 Path('charts').mkdir(exist_ok=True)
 
