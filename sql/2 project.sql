@@ -1,0 +1,117 @@
+SELECT COUNT(*)--кол-во строк
+FROM campaigns;
+
+SELECT * --5 первых строк
+FROM campaigns
+LIMIT 5;
+
+SELECT SUM(revenue) AS total_revenue
+FROM campaigns;  -- общий доход
+
+select sum(clicks) as total_clicks
+From campaigns; --общее кол-во кликов
+
+select avg(cost) as average_cost
+From campaigns; --средние расходы по каждому месяцу
+
+SELECT
+    month,
+    SUM(cost) AS total_cost --расходы по месяцам
+FROM campaigns
+GROUP BY month;
+
+SELECT
+    ad_group,
+    SUM(revenue) AS total_revenue --топ 5 рекламных групп по доходу
+FROM campaigns
+GROUP BY ad_group
+ORDER BY total_revenue DESC
+LIMIT 5;
+
+-- 60. Общий CTR — процент показов, приведших к клику
+SELECT
+    ROUND(
+        SUM(clicks)::NUMERIC / NULLIF(SUM(impressions), 0) * 100,
+        2
+    ) AS ctr
+FROM campaigns;
+
+
+-- 61. CPC — средняя стоимость одного клика
+SELECT
+    ROUND(
+        SUM(cost) / NULLIF(SUM(clicks), 0),
+        2
+    ) AS cpc
+FROM campaigns;
+
+
+-- 62. CPA — средняя стоимость одной конверсии
+SELECT
+    ROUND(
+        SUM(cost) / NULLIF(SUM(conversions), 0),
+        2
+    ) AS cpa
+FROM campaigns;
+
+
+-- 63. ROAS — отношение дохода к рекламным расходам
+SELECT
+    ROUND(
+        SUM(revenue) / NULLIF(SUM(cost), 0),
+        2
+    ) AS roas
+FROM campaigns;
+
+
+-- 64. ROAS по каждому месяцу
+SELECT
+    month,
+    ROUND(SUM(revenue), 2) AS total_revenue,
+    ROUND(SUM(cost), 2) AS total_cost,
+    ROUND(
+        SUM(revenue) / NULLIF(SUM(cost), 0),
+        2
+    ) AS roas
+FROM campaigns
+GROUP BY month
+ORDER BY roas DESC;
+
+--65. — Анализ эффективности рекламных групп по ROAS,CPA и кол-ву конверсий
+SELECT
+    ad_group,
+
+    SUM(cost) AS total_cost,
+    SUM(revenue) AS total_revenue,
+    SUM(conversions) AS total_conversions,
+
+    -- Окупаемость рекламы
+    ROUND(
+        SUM(revenue) / NULLIF(SUM(cost), 0),
+        2
+    ) AS roas,
+
+    -- Стоимость одной конверсии
+    ROUND(
+        SUM(cost) / NULLIF(SUM(conversions), 0),
+        2
+    ) AS cpa
+
+FROM campaigns
+
+GROUP BY ad_group
+
+ORDER BY roas DESC NULLS LAST,
+         total_conversions DESC;--сюда limit 5,чтобы получить топ 5 рекламных групп
+SELECT
+    month,
+    SUM(cost) AS total_cost,
+    SUM(revenue) AS total_revenue,
+    SUM(clicks) AS total_clicks,
+    SUM(conversions) AS total_conversions,
+    ROUND(
+        SUM(revenue) / NULLIF(SUM(cost), 0),
+        2
+    ) AS roas
+FROM campaigns
+GROUP BY month;
